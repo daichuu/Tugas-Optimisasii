@@ -1,0 +1,20 @@
+using JuMP
+using Ipopt
+model = Model(Ipopt.Optimizer)
+@variable(model, x1 >= 0)
+@variable(model, x2 >= 0)
+@variable(model, y)
+@constraint(model, y >= x1)
+@constraint(model, y >= x2)
+@constraint(model, 2*x1 + x2 >= 1)
+@constraint(model, x1 + 3*x2 >= 1)
+@objective(model, Max, y)
+optimize!(model)
+optimal_y = value(y)
+optimal_x1 = value(x1)
+optimal_x2 = value(x2)
+println("Optimal value y: $optimal_y")
+println("Optimal value x1: $optimal_x1")
+println("Optimal value x2: $optimal_x2")
+    return value(x1), value(x2), objective_value(model)
+end
